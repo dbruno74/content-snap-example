@@ -1,3 +1,0 @@
-#!/bin/sh
-
-snapctl start config-snap.config-snap-keys
