@@ -1,36 +1,35 @@
-name: config-snap
+name: content-snap
 base: core20
 version: '0.1'
-summary: Simple snap which acces keys and secrets shared by the 'content-snap' 
+summary: A simple snap used to bring content on a Ubuntu Core device
 description: |
-   The snap just connects to the 'keys' and 'secrets' slot and access the keys and secrets files 
+        This little snap it just contains some contents that is supposed to be shared via content interface on an Ubuntu Core device. Tipical content that you may
+        want to share are secrets, or crypto keys, that you don't want to embed in a Ubuntu Core image for security reasons.
+        Just copy your secrets into the 'secret' folder and your crypto keys into the 'key' folder, then run snapcraft.
+
 grade: stable
 confinement: strict
 
-plugs:
+slots:
   secrets:
-     interface: content
-     content: secrets-files
-     target: $SNAP/secrets
+    interface: content
+    content: secrets-files 
+    read:
+      - $SNAP/secrets
   keys:
-     interface: content
-     content: keys-files
-     target: $SNAP/keys
+    interface: content
+    content: keys-files 
+    read:
+      - $SNAP/keys
 
 parts:
-  list-content-secrets:
-    source: list-content-secrets
+  secrets:
+    source: secrets
     plugin: dump
-  list-content-keys:
-    source: list-content-keys
+    organize:
+      '*': secrets/
+  keys:
+    source: keys
     plugin: dump
-
-
-apps:
-  config-snap-secrets:
-    command: list-content-secrets.sh
-    daemon: oneshot
-  config-snap-keys:
-    command: list-content-keys.sh
-    daemon: oneshot
-
+    organize:
+      '*': keys/
