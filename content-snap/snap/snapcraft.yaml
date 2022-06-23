@@ -1,0 +1,35 @@
+name: content-snap
+base: core20
+version: '0.1'
+summary: A simple snap used to bring content on a Ubuntu Core device
+description: |
+        This little snap it just contains some contents that is supposed to be shared via content interface on an Ubuntu Core device. Tipical content that you may
+        want to share are secrets, or crypto keys, that you don't want to embed in a Ubuntu Core image for security reasons.
+        Just copy your secrets into the 'secret' folder and your crypto keys into the 'key' folder, then run snapcraft.
+
+grade: stable
+confinement: strict
+
+slots:
+  secrets:
+    interface: content
+    content: secrets-files 
+    read:
+      - $SNAP/secrets
+  keys:
+    interface: content
+    content: keys-files 
+    read:
+      - $SNAP/keys
+
+parts:
+  secrets:
+    source: secrets
+    plugin: dump
+    organize:
+      '*': secrets/
+  keys:
+    source: keys
+    plugin: dump
+    organize:
+      '*': keys/
